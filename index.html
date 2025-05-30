@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Tarefas</title>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <meta name="description" content="Gerencie suas tarefas de forma simples e eficiente">
     <meta name="keywords" content="tarefas, produtividade, organização, todo list">
     <meta property="og:title" content="Gestor de Tarefas">
@@ -20,18 +19,19 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-
-    
     <div id="root"></div>
     
     <script type="text/babel" src="components/Header.js"></script>
+    <script type="text/babel" src="components/ProfileDropdown.js"></script>
+    <script type="text/babel" src="components/LoginForm.js"></script>
+    <script type="text/babel" src="components/RegisterForm.js"></script>
+    <script type="text/babel" src="components/StatsSection.js"></script>
     <script type="text/babel" src="components/TaskForm.js"></script>
     <script type="text/babel" src="components/TaskItem.js"></script>
     <script type="text/babel" src="components/TaskList.js"></script>
-     <script type="text/babel" src="components/TaskManager.js"></script>
-
     <script type="text/babel" src="components/FilterBar.js"></script>
     <script type="text/babel" src="utils/taskStorage.js"></script>
+    <script type="text/babel" src="utils/authStorage.js"></script>
     <script type="text/babel" src="app.js"></script>
 </body>
 </html>

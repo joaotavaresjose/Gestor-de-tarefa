@@ -7,33 +7,6 @@
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding-top: 100px;
-    animation: gradientShift 10s ease infinite;
-}
-
-@keyframes gradientShift {
-    0%, 100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    50% { background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); }
-}
-
-.glass-effect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: glassAppear 0.6s ease-out;
-}
-
-.glass-effect:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-@keyframes glassAppear {
-    from { opacity: 0; transform: translateY(20px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .task-card {
@@ -49,18 +22,10 @@ body {
 .task-completed {
     opacity: 0.7;
     text-decoration: line-through;
-    animation: taskComplete 0.5s ease-out;
-}
-
-@keyframes taskComplete {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
 }
 
 .priority-high {
     border-left: 4px solid #ef4444;
-    animation: priorityPulse 2s ease-in-out infinite;
 }
 
 .priority-medium {
@@ -71,21 +36,47 @@ body {
     border-left: 4px solid #10b981;
 }
 
-@keyframes priorityPulse {
-    0%, 100% { border-left-color: #ef4444; }
-    50% { border-left-color: #ff6b6b; }
-}
-
-
 .fade-in {
-    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeIn 0.5s ease-in;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.slide-in {
+    animation: slideIn 0.6s ease-out;
 }
 
+.bounce-in {
+    animation: bounceIn 0.8s ease-out;
+}
+
+.scale-in {
+    animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
 
 .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -95,18 +86,20 @@ body {
 .btn-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-@keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    animation: pulse 2s infinite;
 }
 
-#task-form {
-  animation: fadeSlide 0.6s ease-in-out;
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+    transition: width 0.8s ease-in-out;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    transition: all 0.3s ease;
 }

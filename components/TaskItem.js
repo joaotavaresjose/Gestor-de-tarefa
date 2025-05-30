@@ -1,97 +1,93 @@
 function TaskItem({ task, onToggle, onDelete, onEdit }) {
-  try {
-    if (!task || typeof task !== "object") {
-      throw new Error("Dados inválidos para TaskItem");
-    }
+    try {
+        const getPriorityColor = (priority) => {
+            switch (priority) {
+                case 'high': return 'text-red-400';
+                case 'medium': return 'text-yellow-400';
+                case 'low': return 'text-green-400';
+                default: return 'text-gray-400';
+            }
+        };
 
-    const priorityMap = {
-      high: { color: "text-red-400", label: "Alta" },
-      medium: { color: "text-yellow-400", label: "Média" },
-      low: { color: "text-green-400", label: "Baixa" },
-      default: { color: "text-gray-400", label: "Média" },
-    };
+        const getPriorityText = (priority) => {
+            switch (priority) {
+                case 'high': return 'Alta';
+                case 'medium': return 'Média';
+                case 'low': return 'Baixa';
+                default: return 'Média';
+            }
+        };
 
-    const { color: priorityColor, label: priorityText } =
-      priorityMap[task.priority] || priorityMap.default;
+        const formatDate = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        };
 
-    const formatDate = (dateString) =>
-      dateString ? new Date(dateString).toLocaleDateString("pt-BR") : "";
+        const isOverdue = (dateString) => {
+            if (!dateString) return false;
+            const today = new Date();
+            const dueDate = new Date(dateString);
+            return dueDate < today && !task.completed;
+        };
 
-    const isOverdue = (dateString) => {
-      if (!dateString || task.completed) return false;
-      return new Date(dateString).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-    };
-
-    return (
-      <article
-        className={`task-card bg-white/20 backdrop-blur-lg rounded-xl p-4 border border-white/30 fade-in transition-all ${
-          task.completed ? "task-completed opacity-70" : ""
-        }`}
-        aria-label={`Tarefa: ${task.title}${task.completed ? " (Concluída)" : ""}`}
-      >
-        <div className="flex justify-between items-start gap-3">
-          {/* Parte esquerda: checkbox + conteúdo */}
-          <div className="flex items-start gap-3 flex-1">
-            <button
-              onClick={() => onToggle(task.id)}
-              aria-label={task.completed ? "Desmarcar concluída" : "Marcar como concluída"}
-              className={`mt-1 w-6 h-6 rounded border-2 flex items-center justify-center transition-transform focus:ring-2 ${
-                task.completed ? "bg-green-500 border-green-500 text-white scale-105" : "border-white/40 hover:scale-110"
-              }`}
-            >
-              {task.completed && <i className="fas fa-check text-xs" />}
-            </button>
-
-            {/* Conteúdo da tarefa */}
-            <div className="flex-1 min-w-0">
-              <h3 className={`text-white font-medium ${task.completed ? "line-through opacity-70" : ""}`}>
-                {task.title}
-              </h3>
-
-              {task.description && (
-                <p className={`text-sm text-white/70 mt-1 ${task.completed ? "line-through opacity-70" : ""}`}>
-                  {task.description}
-                </p>
-              )}
-
-              {/* Detalhes: prioridade + data */}
-              <div className="flex items-center gap-4 mt-2 text-xs">
-                <span className={`${priorityColor} font-medium flex items-center`}>
-                  <i className="fas fa-flag mr-1"></i> {priorityText}
-                </span>
-
-                {task.dueDate && (
-                  <span className={`flex items-center ${isOverdue(task.dueDate) ? "text-red-400" : "text-white/60"}`}>
-                    <i className="fas fa-calendar mr-1"></i> {formatDate(task.dueDate)}
-                    {isOverdue(task.dueDate) && <span> (Atrasada)</span>}
-                  </span>
-                )}
-              </div>
+        return (
+            <div className={`task-card bg-white/20 backdrop-blur-lg rounded-xl p-4 border border-white/30 priority-${task.priority} fade-in ${task.completed ? 'task-completed' : ''}`} data-name="task-item" data-file="components/TaskItem.js">
+                <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1">
+                        <button
+                            onClick={() => onToggle(task.id)}
+                            className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                                task.completed 
+                                    ? 'bg-green-500 border-green-500 text-white' 
+                                    : 'border-white/40 hover:border-white/60'
+                            }`}
+                        >
+                            {task.completed && <i className="fas fa-check text-xs"></i>}
+                        </button>
+                        <div className="flex-1">
+                            <h3 className={`font-medium text-white ${task.completed ? 'line-through opacity-70' : ''}`}>
+                                {task.title}
+                            </h3>
+                            {task.description && (
+                                <p className={`text-sm text-white/70 mt-1 ${task.completed ? 'line-through opacity-70' : ''}`}>
+                                    {task.description}
+                                </p>
+                            )}
+                            <div className="flex items-center space-x-4 mt-2 text-xs">
+                                <span className={`${getPriorityColor(task.priority)} font-medium`}>
+                                    <i className="fas fa-flag mr-1"></i>
+                                    {getPriorityText(task.priority)}
+                                </span>
+                                {task.dueDate && (
+                                    <span className={`${isOverdue(task.dueDate) ? 'text-red-400' : 'text-white/60'}`}>
+                                        <i className="fas fa-calendar mr-1"></i>
+                                        {formatDate(task.dueDate)}
+                                        {isOverdue(task.dueDate) && ' (Atrasada)'}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-2 ml-3">
+                        <button
+                            onClick={() => onEdit(task)}
+                            className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                        >
+                            <i className="fas fa-edit text-sm"></i>
+                        </button>
+                        <button
+                            onClick={() => onDelete(task.id)}
+                            className="p-2 text-white/60 hover:text-red-400 hover:bg-white/10 rounded-lg transition-all"
+                        >
+                            <i className="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          {/* Ações */}
-          <div className="flex items-center gap-2 ml-2 shrink-0">
-            <button
-              onClick={() => onEdit(task)}
-              aria-label={`Editar: ${task.title}`}
-              className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-transform hover:scale-110"
-            >
-              <i className="fas fa-edit text-sm"></i>
-            </button>
-
-            <button
-              onClick={() => onDelete(task.id)}
-              aria-label={`Excluir: ${task.title}`}
-              className="p-2 text-white/60 hover:text-red-400 hover:bg-white/10 rounded-lg transition-transform hover:scale-110"
-            >
-              <i className="fas fa-trash text-sm"></i>
-            </button>
-          </div>
-        </div>
-      </article>
-    );
-  } catch (error) {
-    console.error("Erro no componente TaskItem:", error);
-  }
+        );
+    } catch (error) {
+        console.error('TaskItem component error:', error);
+        reportError(error);
+    }
 }

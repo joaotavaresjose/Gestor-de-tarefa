@@ -1,7 +1,3 @@
-
-
-export default App;
-
 function FilterBar({ currentFilter, onFilterChange, taskStats }) {
     try {
         const filters = [
@@ -43,4 +39,3 @@ function FilterBar({ currentFilter, onFilterChange, taskStats }) {
         reportError(error);
     }
 }
-
