@@ -28,6 +28,7 @@ const AuthStorage = {
                 name,
                 email,
                 password,
+                avatar: '',
                 createdAt: new Date().toISOString()
             };
 
@@ -38,6 +39,24 @@ const AuthStorage = {
             return true;
         } catch (error) {
             console.error('Erro no cadastro:', error);
+            return false;
+        }
+    },
+
+    updateProfile: async (updatedUser) => {
+        try {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.id === updatedUser.id);
+            
+            if (userIndex !== -1) {
+                users[userIndex] = updatedUser;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
             return false;
         }
     },

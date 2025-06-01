@@ -1,4 +1,4 @@
-function ProfileDropdown({ user, onLogout, show, onToggle }) {
+function ProfileDropdown({ user, onLogout, onShowProfile, show, onToggle }) {
     try {
         const dropdownRef = React.useRef(null);
 
@@ -24,8 +24,12 @@ function ProfileDropdown({ user, onLogout, show, onToggle }) {
                     onClick={onToggle}
                     className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors"
                 >
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                        <i className="fas fa-user text-sm"></i>
+                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center overflow-hidden">
+                        {user.avatar ? (
+                            <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                        ) : (
+                            <i className="fas fa-user text-sm"></i>
+                        )}
                     </div>
                     <span className="text-sm font-medium">{user.name}</span>
                     <i className={`fas fa-chevron-${show ? 'up' : 'down'} text-xs`}></i>
@@ -37,6 +41,13 @@ function ProfileDropdown({ user, onLogout, show, onToggle }) {
                             <p className="text-white font-medium">{user.name}</p>
                             <p className="text-white/60 text-sm">{user.email}</p>
                         </div>
+                        <button
+                            onClick={onShowProfile}
+                            className="w-full text-left px-4 py-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+                        >
+                            <i className="fas fa-user-edit mr-2"></i>
+                            Editar Perfil
+                        </button>
                         <button
                             onClick={onLogout}
                             className="w-full text-left px-4 py-2 text-white/80 hover:text-white hover:bg-white/10 transition-colors"

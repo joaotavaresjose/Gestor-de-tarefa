@@ -4,6 +4,7 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
         const [description, setDescription] = React.useState('');
         const [priority, setPriority] = React.useState('medium');
         const [dueDate, setDueDate] = React.useState('');
+        const [dueTime, setDueTime] = React.useState('');
 
         React.useEffect(() => {
             if (editingTask) {
@@ -11,6 +12,7 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
                 setDescription(editingTask.description);
                 setPriority(editingTask.priority);
                 setDueDate(editingTask.dueDate);
+                setDueTime(editingTask.dueTime || '');
             }
         }, [editingTask]);
 
@@ -22,7 +24,8 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
                 title: title.trim(),
                 description: description.trim(),
                 priority,
-                dueDate
+                dueDate,
+                dueTime
             };
 
             if (editingTask) {
@@ -35,6 +38,7 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
             setDescription('');
             setPriority('medium');
             setDueDate('');
+            setDueTime('');
         };
 
         return (
@@ -61,11 +65,11 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
                             rows="2"
                         />
                     </div>
-                    <div className="flex gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <select
                             value={priority}
                             onChange={(e) => setPriority(e.target.value)}
-                            className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/30"
                         >
                             <option value="low">Baixa Prioridade</option>
                             <option value="medium">Média Prioridade</option>
@@ -75,7 +79,13 @@ function TaskForm({ onAddTask, editingTask, onUpdateTask, onCancelEdit }) {
                             type="date"
                             value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
-                            className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/30"
+                        />
+                        <input
+                            type="time"
+                            value={dueTime}
+                            onChange={(e) => setDueTime(e.target.value)}
+                            className="px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/30"
                         />
                     </div>
                     <div className="flex gap-3">

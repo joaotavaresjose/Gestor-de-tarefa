@@ -1,2 +1,0 @@
-"# Gestor-de-tarefa" 
-joaoa

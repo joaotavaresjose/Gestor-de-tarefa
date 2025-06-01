@@ -18,17 +18,27 @@ function TaskItem({ task, onToggle, onDelete, onEdit }) {
             }
         };
 
-        const formatDate = (dateString) => {
+        const formatDateTime = (dateString, timeString) => {
             if (!dateString) return '';
             const date = new Date(dateString);
-            return date.toLocaleDateString('pt-BR');
+            let formatted = date.toLocaleDateString('pt-BR');
+            if (timeString) {
+                formatted += ` às ${timeString}`;
+            }
+            return formatted;
         };
 
-        const isOverdue = (dateString) => {
+        const isOverdue = (dateString, timeString) => {
             if (!dateString) return false;
-            const today = new Date();
-            const dueDate = new Date(dateString);
-            return dueDate < today && !task.completed;
+            const now = new Date();
+            const dueDateTime = new Date(dateString);
+            
+            if (timeString) {
+                const [hours, minutes] = timeString.split(':');
+                dueDateTime.setHours(parseInt(hours), parseInt(minutes));
+            }
+            
+            return dueDateTime < now && !task.completed;
         };
 
         return (
@@ -60,10 +70,10 @@ function TaskItem({ task, onToggle, onDelete, onEdit }) {
                                     {getPriorityText(task.priority)}
                                 </span>
                                 {task.dueDate && (
-                                    <span className={`${isOverdue(task.dueDate) ? 'text-red-400' : 'text-white/60'}`}>
+                                    <span className={`${isOverdue(task.dueDate, task.dueTime) ? 'text-red-400' : 'text-white/60'}`}>
                                         <i className="fas fa-calendar mr-1"></i>
-                                        {formatDate(task.dueDate)}
-                                        {isOverdue(task.dueDate) && ' (Atrasada)'}
+                                        {formatDateTime(task.dueDate, task.dueTime)}
+                                        {isOverdue(task.dueDate, task.dueTime) && ' (Atrasada)'}
                                     </span>
                                 )}
                             </div>

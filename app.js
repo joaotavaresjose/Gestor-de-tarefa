@@ -31,6 +31,7 @@ function App() {
 
         const handleLogout = () => {
             AuthStorage.logout();
+            TaskStorage.clearScheduledNotifications();
             setUser(null);
             setTasks([]);
             setEditingTask(null);
@@ -42,6 +43,15 @@ function App() {
             const updatedTasks = [newTask, ...tasks];
             setTasks(updatedTasks);
             TaskStorage.saveTasks(updatedTasks);
+            
+            if (newTask.dueDate) {
+                NotificationStorage.addNotification(
+                    'Nova Tarefa Criada',
+                    `Tarefa "${newTask.title}" foi criada com prazo para ${new Date(newTask.dueDate).toLocaleDateString('pt-BR')}${newTask.dueTime ? ` às ${newTask.dueTime}` : ''}!`,
+                    newTask.id,
+                    false
+                );
+            }
         };
 
         const updateTask = (taskId, taskData) => {
@@ -56,11 +66,23 @@ function App() {
         };
 
         const toggleTask = (taskId) => {
-            const updatedTasks = tasks.map(task =>
-                task.id === taskId
-                    ? { ...task, completed: !task.completed, updatedAt: new Date().toISOString() }
-                    : task
-            );
+            const updatedTasks = tasks.map(task => {
+                if (task.id === taskId) {
+                    const updatedTask = { ...task, completed: !task.completed, updatedAt: new Date().toISOString() };
+                    
+                    if (updatedTask.completed) {
+                        NotificationStorage.addNotification(
+                            '🎉 Tarefa Concluída!',
+                            `Parabéns! Você concluiu a tarefa "${task.title}".`,
+                            taskId,
+                            false
+                        );
+                    }
+                    
+                    return updatedTask;
+                }
+                return task;
+            });
             setTasks(updatedTasks);
             TaskStorage.saveTasks(updatedTasks);
         };
